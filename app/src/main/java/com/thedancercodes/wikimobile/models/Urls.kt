@@ -33,7 +33,7 @@ object Urls {
     // random articles on Wikipedia.
     fun getRandomUrl(take: Int) : String{
         return BaseUrl + "?action=query" +
-                "format=json" +
+                "&format=json" +
                 "&formatversion=2" +
                 "&generator=random" +
                 "&grnnamespace=0" +

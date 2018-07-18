@@ -6,19 +6,32 @@ import android.view.ViewGroup
 import com.thedancercodes.wikimobile.R
 import com.thedancercodes.wikimobile.holders.CardHolder
 import com.thedancercodes.wikimobile.holders.ListItemHolder
+import com.thedancercodes.wikimobile.models.WikiPage
 
 
 class ArticleListItemRecyclerAdapter : RecyclerView.Adapter<ListItemHolder>(){
 
+    /*
+        Collection of WikiPages representing our data-set.
+
+        This ArrayList of WikiPages will be set within the Fragment or Activity that's updating with
+        the data.
+    */
+    val currentResults: ArrayList<WikiPage> = ArrayList<WikiPage>()
+
     // The number of items that our RecyclerView will contain
     override fun getItemCount(): Int {
-        return 15 // temporary
+        return currentResults.size // Returns size of the ArrayList
     }
 
     // How we update the ViewHolder's content with new content from our page
     override fun onBindViewHolder(holder: ListItemHolder, position: Int) {
 
-        // This is where we will update our View.
+        // Grab page from Current Result
+        var page = currentResults[position]
+
+        // Update View within Holder.
+        holder?.updateWithPage(page)
     }
 
     // Create the ViewHolder
