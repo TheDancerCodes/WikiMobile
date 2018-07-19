@@ -15,7 +15,9 @@ import com.thedancercodes.wikimobile.WikiApplication
 import com.thedancercodes.wikimobile.adapters.ArticleCardRecyclerAdapter
 import com.thedancercodes.wikimobile.adapters.ArticleListItemRecyclerAdapter
 import com.thedancercodes.wikimobile.managers.WikiManager
+import com.thedancercodes.wikimobile.models.WikiPage
 import kotlinx.android.synthetic.main.fragment_favorites.*
+import org.jetbrains.anko.doAsync
 
 /**
  * A simple [Fragment] subclass.
@@ -26,6 +28,7 @@ class FavoritesFragment : Fragment() {
     // Private variables for our Views.
     private var wikiManager: WikiManager? = null
     var favoritesRecycler: RecyclerView? = null
+    private var adapter: ArticleCardRecyclerAdapter = ArticleCardRecyclerAdapter()
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -39,10 +42,21 @@ class FavoritesFragment : Fragment() {
 
         favoritesRecycler = view.findViewById<RecyclerView>(R.id.favorites_article_recycler)
         favoritesRecycler!!.layoutManager = LinearLayoutManager(context)
-        favoritesRecycler!!.adapter = ArticleCardRecyclerAdapter()
+        favoritesRecycler!!.adapter = adapter
 
         return view
     }
 
+    // Get the Favorites from the WikiManager & add them into the Adapter.
+    override fun onResume() {
+        super.onResume()
 
+        // Use Anko's helpers to do things Asynchronous
+        doAsync {
+            val favoriteArticles = wikiManager!!.getFavorites()
+            adapter.currentResults.clear()
+            adapter.currentResults.addAll(favoriteArticles as ArrayList<WikiPage>)
+            activity?.runOnUiThread { adapter.notifyDataSetChanged() }
+        }
+    }
 }
