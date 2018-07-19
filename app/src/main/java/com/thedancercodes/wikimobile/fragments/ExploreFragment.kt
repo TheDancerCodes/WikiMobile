@@ -1,6 +1,7 @@
 package com.thedancercodes.wikimobile.fragments
 
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -14,8 +15,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.thedancercodes.wikimobile.R
+import com.thedancercodes.wikimobile.WikiApplication
 import com.thedancercodes.wikimobile.activities.SearchActivity
 import com.thedancercodes.wikimobile.adapters.ArticleCardRecyclerAdapter
+import com.thedancercodes.wikimobile.managers.WikiManager
 import com.thedancercodes.wikimobile.providers.ArticleDataProvider
 
 /**
@@ -25,11 +28,18 @@ import com.thedancercodes.wikimobile.providers.ArticleDataProvider
 class ExploreFragment : Fragment() {
 
     // Private variables for our Views.
-    private val articleProvider: ArticleDataProvider = ArticleDataProvider()
+    private var wikiManager: WikiManager? = null
     var searchCardView: CardView? = null
     var exploreRecycler: RecyclerView? = null
     var refresher: SwipeRefreshLayout? = null
     var adapter: ArticleCardRecyclerAdapter = ArticleCardRecyclerAdapter()
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+
+        // // Instantiate WikiManager - Cast the Activity ApplicationContext to the WikiApplication
+        wikiManager = (activity?.applicationContext as WikiApplication).wikiManager
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -70,7 +80,7 @@ class ExploreFragment : Fragment() {
         refresher?.isRefreshing = true
 
         try {
-            articleProvider.getRandom(15, { wikiResult ->
+            wikiManager?.getRandom(15, { wikiResult ->
 
                 // Update results when we get articles
                 adapter.currentResults.clear()

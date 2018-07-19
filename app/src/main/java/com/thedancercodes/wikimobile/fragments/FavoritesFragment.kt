@@ -1,6 +1,7 @@
 package com.thedancercodes.wikimobile.fragments
 
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -10,8 +11,10 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.thedancercodes.wikimobile.R
+import com.thedancercodes.wikimobile.WikiApplication
 import com.thedancercodes.wikimobile.adapters.ArticleCardRecyclerAdapter
 import com.thedancercodes.wikimobile.adapters.ArticleListItemRecyclerAdapter
+import com.thedancercodes.wikimobile.managers.WikiManager
 import kotlinx.android.synthetic.main.fragment_favorites.*
 
 /**
@@ -21,7 +24,13 @@ import kotlinx.android.synthetic.main.fragment_favorites.*
 class FavoritesFragment : Fragment() {
 
     // Private variables for our Views.
+    private var wikiManager: WikiManager? = null
     var favoritesRecycler: RecyclerView? = null
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        wikiManager = (activity?.applicationContext as WikiApplication).wikiManager
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {

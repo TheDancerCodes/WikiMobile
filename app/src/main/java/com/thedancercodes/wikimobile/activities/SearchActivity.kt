@@ -9,19 +9,24 @@ import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
 import com.thedancercodes.wikimobile.R
+import com.thedancercodes.wikimobile.WikiApplication
 import com.thedancercodes.wikimobile.adapters.ArticleListItemRecyclerAdapter
+import com.thedancercodes.wikimobile.managers.WikiManager
 import com.thedancercodes.wikimobile.providers.ArticleDataProvider
 import kotlinx.android.synthetic.main.activity_search.*
 
 class SearchActivity : AppCompatActivity() {
 
     // Private variables for our Views.
-    private val articleProvider: ArticleDataProvider = ArticleDataProvider()
+    private var wikiManager: WikiManager? = null
     private var adapter: ArticleListItemRecyclerAdapter = ArticleListItemRecyclerAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+
+        // Instantiate WikiManager
+        wikiManager = (applicationContext as WikiApplication).wikiManager
 
         // Set the supportActionBar using a v7 toolbar we added in our layout.
         setSupportActionBar(toolbar)
@@ -69,7 +74,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onQueryTextSubmit(query: String): Boolean {
 
                 // Do the search and update the elements
-                articleProvider.search(query, 0, 20, { wikiResult ->
+                wikiManager?.search(query, 0, 20, { wikiResult ->
 
                     // Update results when we get articles
                     adapter.currentResults.clear()
