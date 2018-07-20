@@ -30,6 +30,11 @@ class HistoryFragment : Fragment() {
     var historyRecycler: RecyclerView? = null
     private val adapter = ArticleListItemRecyclerAdapter()
 
+    // To ensure the Clear toolbar option is visible
+    init {
+        setHasOptionsMenu(true)
+    }
+
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         wikiManager = (activity?.applicationContext as WikiApplication).wikiManager

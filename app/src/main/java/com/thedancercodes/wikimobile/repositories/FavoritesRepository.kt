@@ -6,16 +6,17 @@ import com.thedancercodes.wikimobile.models.WikiThumbnail
 import org.jetbrains.anko.db.delete
 import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.rowParser
+import org.jetbrains.anko.db.select
 
 
 // Stores & Accesses Data from Favorites table
-class FavoritesRepository(val databaseOpenHelper: ArticleDatabaseOpenHelper) {
+class FavoritesRepository(val databaseHelper: ArticleDatabaseOpenHelper) {
 
     // TABLE_NAME Constant
     private val TABLE_NAME: String = "Favorites"
 
     fun addFavorite(page: WikiPage) {
-        databaseOpenHelper.use {
+        databaseHelper.use {
             insert(TABLE_NAME,
                     "id" to page.pageid,
                     "title" to page.title,
@@ -25,7 +26,7 @@ class FavoritesRepository(val databaseOpenHelper: ArticleDatabaseOpenHelper) {
     }
 
     fun removeFavoriteById(pageId: Int) {
-        databaseOpenHelper.use {
+        databaseHelper.use {
             delete(TABLE_NAME, "id = {pageId}", "pageId" to pageId)
         }
     }
@@ -55,8 +56,12 @@ class FavoritesRepository(val databaseOpenHelper: ArticleDatabaseOpenHelper) {
             page.thumbnail = Gson().fromJson(thumbnailJson, WikiThumbnail::class.java)
 
             pages.add(page)
-
         }
+
+        databaseHelper.use {
+            select(TABLE_NAME).parseList(articleRowParser)
+        }
+
         return pages
     }
 }

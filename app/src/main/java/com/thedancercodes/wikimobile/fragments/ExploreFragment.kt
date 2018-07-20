@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.widget.CardView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -59,7 +60,7 @@ class ExploreFragment : Fragment() {
         }
 
         // Wire up our adapter with our RecyclerView
-        exploreRecycler!!.layoutManager = LinearLayoutManager(context)
+        exploreRecycler!!.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         exploreRecycler!!.adapter = adapter
 
         // Listener for when pull-to-refresh is invoked.
